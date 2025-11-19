@@ -1,0 +1,98 @@
+header{
+    padding: 2.5rem; 
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+}
+.bag-section{
+    display: flex;
+    flex-direction: column;
+}
+.calc button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 0.95rem;
+}
+.calc button img{
+    display: inline-block;
+}
+.promo-showed{
+    transform: rotateZ(180deg);
+    transition: all .2s ease-in-out;
+}
+.hidden{
+    display: none;
+}
+.promo-btn{
+    background-color: transparent;
+    padding: 0.5rem 0;
+    text-align: left;
+    border: 1px solid transparent;
+
+}
+span{
+    font-weight: 500;
+}
+.calc{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.calc p{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 3rem;
+}
+.header{
+    font-weight: 700;
+    font-size: 2rem;
+}
+.promo-form{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(-5rem);
+    animation: fromTop .6s cubic-bezier(.22,.9,.28,1) forwards !important;
+}
+input[type="text"]{
+    border-radius: 10px;
+    border: 1px solid #000;
+    height: 2.5rem;
+}
+.promo-submit{
+    text-align: center;
+    padding:0 1.5rem;
+    border-radius: 10px;
+    color: #000;
+    border: 1px solid #000;
+    height: 100%;
+    transition: all .2s ease-in;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+.promo-submit:hover{
+    background-color: #000;
+    color: white;
+}
+.checkout{
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding:0.8rem 0;
+    font-size: 1rem;
+    border-radius: 100px;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+    transition: all .2s ease-in;
+}
+.checkout:hover{
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+
+}
