@@ -45,7 +45,7 @@
     </div>
     <nav>
         <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" alt="">
+            <img src="imgs\icons\logo_black.svg" width="50" alt="">
         </a>
         <ul>
             <li><a class="nav-link" href="">Store</a></li>
