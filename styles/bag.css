@@ -96,3 +96,13 @@ input[type="text"]{
     color: rgb(0, 0, 0);
 
 }
+@media (max-width:800px) {
+    header{
+        flex-direction: column;
+        gap:5rem;
+    }
+    .calc{
+        border-top: #dbdbdb 1px solid;
+        padding-top: 2rem;
+    }
+}

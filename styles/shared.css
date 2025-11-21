@@ -95,7 +95,6 @@ nav > ul > li:nth-child(11) {
   width: 100%;
 }
 .logo {
-  width: 1rem;
   animation: opacity 0.7s ease-in forwards;
 }
 .nav-right {

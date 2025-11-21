@@ -8,6 +8,9 @@
     align-items: center;
 }
 
+body{
+    position: relative;
+}
 /* header */
 
 header{
@@ -176,6 +179,48 @@ main{
   }
 }
 
+
+.msgIsland{
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    color: black;
+    position: absolute;
+    top: 0.5rem;
+    left:50%;
+    margin-top: -5rem;
+    opacity: 0;
+    transform: translateX(-50%);
+    z-index: 1000;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 5px;
+    gap:1rem;
+    animation: msgIsland 3.3s ease-in-out forwards;
+}
+.msgIsland img{
+    display: inline-block;
+}
+@keyframes msgIsland {
+    0%{
+        margin-top: -5rem;
+        opacity: 0;
+    }
+    15%{
+        margin-top: 0rem;
+        opacity: 1;
+    }
+    85%{
+        opacity: 1;
+        margin-top: 0rem;
+    }
+    100%{
+        margin-top: -5rem;
+        opacity: 0;
+        display: none;
+    }
+}
 /* r e s p o n s i v e */
 
 @media (max-width:1420px) {
@@ -212,13 +257,13 @@ main{
     }
 }@media (max-width:765px) {       
     .hero-box h1{
-        font-size: 2.35rem;
+        font-size: 2.75rem;
     }
     .hero-box p{
         font-size: 0.9rem;
     }
 }
-@media (max-width:450px) {
+@media (max-width:690px) {
     .air{
         background-color: #fafafa;
     border-bottom: 1px solid transparent;

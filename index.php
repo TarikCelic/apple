@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +49,7 @@
     </div>
     <nav>
         <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" width="50" alt="">
+            <img src="imgs\icons\logo_black.svg" width="27" alt="">
         </a>
         <ul>
             <li><a class="nav-link" href="">Store</a></li>
@@ -79,18 +83,18 @@
             src="imgs\hero\iphone16.mp4"
             autoplay
             muted
+            poster="imgs\hero\poster.jpg"
             loop
             playsinline
             style="width:100%; object-fit:cover;">
         </video>
-        <div href="" class="hero-box">
+        <div class="hero-box">
             <h1>iPhone 17 is available</h1>
             <p>Explore new iPhone 17 models in our shop.
                 Get in touch with the greatest phone ever
             </p>
             <a href="#">Shop</a>
         </div>
-        </a>
     </header>
 
     <a href="#" class="air">
@@ -200,7 +204,7 @@
                         <a href="#" class="hover:underline">Events</a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Contact Apple</a>
+                        <a href="contact.php" class="hover:underline">Contact Apple</a>
                     </li>
                 </ul>
             </div>
@@ -248,27 +252,36 @@
         </div>
     </footer>
 
-    <script>
-        const hambi = document.querySelector('.hambi')
-        const backdrop = document.querySelector('.backdrop')
-        const body = document.querySelector('body');
-        const leaveNav = document.querySelector('.leave-nav');
+    <div class="msgIsland">
+        <img src="" width="20" alt="">
+        <p class="msgTxt"></p>
+    </div>
 
-        hambi.addEventListener('click',()=>{
-            backdrop.style.display="flex"
-            body.style.overflow = "hidden"
-        })
-        backdrop.addEventListener('click',(e)=>{
-            if(e.target === backdrop){
-                backdrop.style.display="none"
-                body.style.overflow = "auto"
-            }
-        })
-        leaveNav.addEventListener('click',(e)=>{
-            backdrop.style.display="none"
-            body.style.overflow = "auto"
-        })
-    </script>
+    <?php
+        if (isset($_SESSION['msg'])) {
+            $msg    = $_SESSION['msg'];
+            $sucess = $_SESSION['succeseful'];
 
+            unset($_SESSION['msg']);
+            unset($_SESSION['succeseful']);
+
+            $icon = $sucess ? "imgs/icons/sucess.svg" : "imgs/icons/wrong.svg";
+
+            echo '
+                <script>
+
+                    const msgIsland = document.querySelector(".msgIsland");
+                    const msgTxt = document.querySelector(".msgTxt");
+                    const msgIcon = document.querySelector(".msgIsland img");
+
+                    msgIsland.style.display = "flex"
+                    msgTxt.textContent = ' . json_encode($msg) . ';
+                    msgIcon.src = "' . $icon . '";
+
+                </script>
+            ';
+        }
+    ?>
+    <script src="scripts/navigation.js"></script>
 </body>
 </html>

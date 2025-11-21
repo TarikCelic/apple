@@ -45,7 +45,7 @@
     </div>
     <nav>
         <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" class="logo" alt="">
+            <img src="imgs\icons\logo_black.svg" width="27" class="logo" alt="">
         </a>
         <ul>
             <li><a class="nav-link" href="">Store</a></li>
@@ -94,7 +94,7 @@
                         <label for="floating_outlined" class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Promo Code</label>
                     </div>
                 </div>
-                <input type="submit" name="promo" class="promo-submit">
+                <input type="submit" name="promo" value="Submit" class="promo-submit">
             </form>
 
             <hr>
@@ -106,33 +106,17 @@
     </header>
 
     <script>
-        const hambi = document.querySelector('.hambi')
-        const backdrop = document.querySelector('.backdrop')
-        const body = document.querySelector('body');
-        const leaveNav = document.querySelector('.leave-nav');
+
         const promoBtn = document.querySelector('.promo-btn');
         const promoForm = document.querySelector('.promo-form');
         const promoFormImg = document.querySelector('.promo-btn img');
-
-        hambi.addEventListener('click',()=>{
-            backdrop.style.display="flex"
-            body.style.overflow = "hidden"
-        })
-        backdrop.addEventListener('click',(e)=>{
-            if(e.target === backdrop){
-                backdrop.style.display="none"
-                body.style.overflow = "auto"
-            }
-        })
-        leaveNav.addEventListener('click',(e)=>{
-            backdrop.style.display="none"
-            body.style.overflow = "auto"
-        })
 
         promoBtn.addEventListener('click',(e)=>{
             promoForm.classList.toggle('hidden')
             promoFormImg.classList.toggle('promo-showed')
         })
     </script>
+
+    <script src="scripts/navigation.js"></script>
 </body>
 </html>

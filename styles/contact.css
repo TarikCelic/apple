@@ -1,0 +1,77 @@
+.error-msg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+    flex-direction: column;
+}
+body{
+    width: 100%;
+}
+.form h1,
+.error-msg h1{
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-align: center;
+}
+.form p,
+.error-msg p{
+    font-size: 1.05rem;
+    text-align: center;
+}
+.form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+    padding: 3rem 0;
+}
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 90%;
+    gap: 1rem;
+    padding-top: 3rem;
+}
+textarea,
+input
+{
+    width: 100% !important;
+    border: 1px solid rgba(0, 0, 0, 0.377);
+    border-radius: 10px;
+}
+.input{
+    padding: 0.5rem 1rem;
+}
+textarea:focus,
+input:focus {
+    outline: 2px solid #1e6dff !important;
+    outline-offset: 2px;
+}
+
+.submit{
+    background-color: #1e6dff;
+    color: white;
+    width: 50% !important;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 0.75rem;
+    transition: all .2s ease-in;
+    border: 1px solid #1e6dff;
+}
+.submit:hover{
+    border: 1px solid #1e6dff;
+    background-color: white;
+    color: #1e6dff;
+}
+@media (min-width:1000px) {
+    form{
+        width: 50%;
+    }
+}
+p.error{
+    color: red;
+}
