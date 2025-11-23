@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    require_once "auth.php";
 ?>
 
 <!DOCTYPE html>
@@ -72,9 +72,74 @@
             <a href="bag.php" class="bag nav-icon">
                 <img src="imgs\icons\bag.svg" width="25rem" alt="">
             </a>
-        </div>
+            <?php if (isset($_SESSION['id'])): ?>
+                <div class="user-menu">
+                    <img src="imgs\icons\user.svg" width ="25" alt="">
+
+                    <div class="user-dropdown">
+                        <div class="user-about">
+                            <div class="user-img">
+                                <img src=<?php echo $_SESSION['img'] ?> class="profile-pic-little" alt="">
+                            </div>
+                            <div class="user-name-n-r">
+                                <p class="name"><?php echo $_SESSION['username'] ?></p>
+
+                                <?php if ($_SESSION['perm'] == 1): ?>
+                                <p class="role r-s">Supporter</p>
+                                <?php elseif ($_SESSION['perm'] == 2): ?>
+                                <p class="role r-a">Administrator</p>
+                                <?php elseif ($_SESSION['perm'] == 3): ?>
+                                <p class="role r-sa">Super Administrator</p>
+                                <?php elseif ($_SESSION['perm'] == 4): ?>
+                                <p class="role r-g">💩Govance</p>
+
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <a href="account.php" class="um-item">
+                            <div class="left-um-item">
+                                <img src="imgs/icons/manage.svg" width="20" alt="">
+                                Manage Account
+                            </div>
+                            <img src="imgs\icons\goto.svg" width="25"  alt="">
+                        </a>
+                        <a href="notifications.php" class="um-item">
+                            <div class="left-um-item">
+                                <img src="imgs/icons/notifications.svg" width="20" alt="">
+                                Notifications
+                            </div>
+                            <img src="imgs\icons\goto.svg" width="25"  alt="">
+                        </a>
+                        <a class="um-item">
+                            <div class="left-um-item">
+                                <img src="imgs/icons/help.svg" width="20" alt="">
+                                Help and Support
+                            </div>
+                            <img src="imgs\icons\goto.svg" width="25"  alt="">
+                        </a>
+                        <?php if ($_SESSION['perm'] > 0): ?>
+                        <a href="dashboard.php" class="um-item">
+                            <div class="left-um-item">
+                                <img src="imgs/icons/dashboard.svg" width="20" alt="">
+                                Dashboard
+                            </div>
+                            <img src="imgs\icons\goto.svg" width="25"  alt="">
+                        </a>
+                        <?php endif; ?>
+                        <hr>
+                        <a href="logout.php" class="um-item">
+                            <div href="logout.php" class="left-um-item">
+                                <img src="imgs/icons/logout.svg" width="20" alt="">
+                                Log out
+                            </div>
+                            <img src="imgs\icons\goto.svg" width="25"  alt="">
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
         <div class="hambi">
             <img src="imgs/icons/hambi.svg" width="25rem" alt="">
+        </div>
         </div>
     </nav>
 

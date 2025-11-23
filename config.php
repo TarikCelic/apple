@@ -29,7 +29,7 @@ $conn = mysqli_connect(
 );
 
 if ($conn) {
-    echo "<script>console.log('Povezano!')</script>";
+    echo '';
 } else {
     echo "Greška: " . mysqli_connect_error();
 }

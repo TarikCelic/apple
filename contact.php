@@ -27,8 +27,9 @@
         }
 
         if (empty($errors)) {
-            $stmt = mysqli_prepare($conn, "INSERT INTO contact_messages (name,email,subject,message) VALUES (?,?,?,?)");
-            mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $subject, $message);
+            $id   = $_SESSION['id'];
+            $stmt = mysqli_prepare($conn, "INSERT INTO contact_messages (user_id,name,email,subject,message) VALUES (?,?,?,?,?)");
+            mysqli_stmt_bind_param($stmt, "issss", $id, $username, $email, $subject, $message);
             mysqli_stmt_execute($stmt);
 
             $_SESSION['succeseful'] = true;
