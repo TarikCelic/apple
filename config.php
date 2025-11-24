@@ -27,9 +27,3 @@ $conn = mysqli_connect(
     $config["pass"],
     $config["name"]
 );
-
-if ($conn) {
-    echo '';
-} else {
-    echo "Greška: " . mysqli_connect_error();
-}

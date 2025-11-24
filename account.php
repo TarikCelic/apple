@@ -1,129 +1,137 @@
 <?php
-    require_once "auth.php";
+    session_start();
     require_once "config.php";
 
-    $changes = false;
-    $errors  = [];
+    if(isset($_SESSION['id'])){
 
-    $stmt = mysqli_prepare($conn, "SELECT email FROM users WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    mysqli_stmt_close($stmt);
-    $user  = mysqli_fetch_assoc($result);
-    $email = $user['email'];
+        require_once "auth.php";
 
-    if (isset($_POST['submit'])) {
+        $changes = false;
+        $errors  = [];
         $id = $_SESSION['id'];
 
-        if (! empty($_POST['newUsername'])) {
-            $newUsername = htmlspecialchars($_POST['newUsername']);
+        $stmt = mysqli_prepare($conn, "SELECT email FROM users WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+        $user  = mysqli_fetch_assoc($result);
+        $email = $user['email'];
 
-            $stmt = mysqli_prepare($conn, "UPDATE users SET name = ? WHERE id = ?");
-            mysqli_stmt_bind_param($stmt, "si", $newUsername, $id);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_close($stmt);
+        if (isset($_POST['submit'])) {
 
-            $_SESSION['username'] = $newUsername;
-        }
-        if (! empty($_POST['oldPw']) && ! empty($_POST['newPw'])) {
-            $oldPw = $_POST['oldPw'];
-            $newPw = $_POST['newPw'];
+            if (! empty($_POST['newUsername'])) {
+                $newUsername = htmlspecialchars($_POST['newUsername']);
 
-            if (strlen($newPw) < 8) {
-                $errors['password'] = "Password must be at least 8 characters long.";
-            } else {
-                $stmt = mysqli_prepare($conn, "SELECT password FROM users WHERE id = ?");
-                mysqli_stmt_bind_param($stmt, "i", $id);
+                $stmt = mysqli_prepare($conn, "UPDATE users SET name = ? WHERE id = ?");
+                mysqli_stmt_bind_param($stmt, "si", $newUsername, $id);
                 mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
                 mysqli_stmt_close($stmt);
 
-                $user        = mysqli_fetch_assoc($result);
-                $hashedCheck = password_verify($oldPw, $user['password']);
-
-                if (empty($errors)) {
-                    if ($hashedCheck) {
-                        $hashedNew = password_hash($newPw, PASSWORD_DEFAULT);
-                        $stmt      = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE id = ?");
-                        mysqli_stmt_bind_param($stmt, "si", $hashedNew, $id);
-                        mysqli_stmt_execute($stmt);
-                        mysqli_stmt_close($stmt);
-                        $changes = true;
-                    } else {
-                        $errors['password'] = "Old password is incorrect.";
-                    }
-                }
+                $_SESSION['username'] = $newUsername;
             }
-        }
-        if (! empty($_POST['oldPw']) && empty($_POST['newPw'])) {
-            $errors['password-confirm'] = "Passwords should match.";
-        }
-        if (empty($_POST['oldPw']) && ! empty($_POST['newPw'])) {
-            $errors['password'] = "Passwords should't be empty.";
-        }
-        if (isset($_FILES['profileImg']) && $_FILES['profileImg']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['profileImg'];
+            if (! empty($_POST['oldPw']) && ! empty($_POST['newPw'])) {
+                $oldPw = $_POST['oldPw'];
+                $newPw = $_POST['newPw'];
 
-            $fileName         = $file['name'];
-            $fileTempLocation = $file['tmp_name'];
-            $fileSize         = $file['size'];
-            $fileError        = $file['error'];
-            $fileExt          = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $uploadDir        = "imgs_users/";
-
-            $maxFileSize = 10 * 1024 * 1024;
-            $allowedExt  = ['jpg', 'jpeg', 'png', 'gif'];
-
-            if ($fileSize > $maxFileSize) {
-                $errors['file'] = "File is too large. The maximum allowed size is 10MB";
-            }
-            if (! in_array($fileExt, $allowedExt)) {
-                $errors['file'] = "Disallowed file extension";
-            }
-            if (empty($errors)) {
-                if (! file_exists($uploadDir) && ! is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                $newFileName = "user-" . uniqid() . "-" . time() . "." . $fileExt;
-                $destination = $uploadDir . $newFileName;
-
-                $stmt = mysqli_prepare($conn, "SELECT * FROM user_imgs WHERE user_id = ?");
-                mysqli_stmt_bind_param($stmt, "i", $id);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-
-                if (mysqli_num_rows($result) > 0) {
-                    $userImg = mysqli_fetch_assoc($result);
-
-                    if (file_exists($userImg['path'])) {
-                        unlink($userImg['path']);
-                    }
-
-                    if (move_uploaded_file($fileTempLocation, $destination)) {
-
-                        $stmt = mysqli_prepare($conn, "UPDATE user_imgs SET path = ? WHERE user_id = ?");
-                        mysqli_stmt_bind_param($stmt, "si", $destination, $id);
-                        mysqli_stmt_execute($stmt);
-                        mysqli_stmt_close($stmt);
-                    }
+                if (strlen($newPw) < 8) {
+                    $errors['password'] = "Password must be at least 8 characters long.";
                 } else {
-                    if (move_uploaded_file($fileTempLocation, $destination)) {
-                        $stmt = mysqli_prepare($conn, "INSERT INTO user_imgs (path,user_id) VALUES (?,?) ");
-                        mysqli_stmt_bind_param($stmt, "si", $destination, $id);
-                        mysqli_stmt_execute($stmt);
-                        mysqli_stmt_close($stmt);
+                    $stmt = mysqli_prepare($conn, "SELECT password FROM users WHERE id = ?");
+                    mysqli_stmt_bind_param($stmt, "i", $id);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
+                    mysqli_stmt_close($stmt);
+
+                    $user        = mysqli_fetch_assoc($result);
+                    $hashedCheck = password_verify($oldPw, $user['password']);
+
+                    if (empty($errors)) {
+                        if ($hashedCheck) {
+                            $hashedNew = password_hash($newPw, PASSWORD_DEFAULT);
+                            $stmt      = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE id = ?");
+                            mysqli_stmt_bind_param($stmt, "si", $hashedNew, $id);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+                            $changes = true;
+                        } else {
+                            $errors['password'] = "Old password is incorrect.";
+                        }
                     }
                 }
-                $changes = true;
             }
+            if (! empty($_POST['oldPw']) && empty($_POST['newPw'])) {
+                $errors['password-confirm'] = "Passwords should match.";
+            }
+            if (empty($_POST['oldPw']) && ! empty($_POST['newPw'])) {
+                $errors['password'] = "Passwords should't be empty.";
+            }
+            if (isset($_FILES['profileImg']) && $_FILES['profileImg']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['profileImg'];
+
+                $fileName         = $file['name'];
+                $fileTempLocation = $file['tmp_name'];
+                $fileSize         = $file['size'];
+                $fileError        = $file['error'];
+                $fileExt          = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                $uploadDir        = "imgs_users/";
+
+                $maxFileSize = 10 * 1024 * 1024;
+                $allowedExt  = ['jpg', 'jpeg', 'png', 'gif'];
+
+                if ($fileSize > $maxFileSize) {
+                    $errors['file'] = "File is too large. The maximum allowed size is 10MB";
+                }
+                if (! in_array($fileExt, $allowedExt)) {
+                    $errors['file'] = "Disallowed file extension";
+                }
+                if (empty($errors)) {
+                    if (! file_exists($uploadDir) && ! is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+
+                    $newFileName = "user-" . uniqid() . "-" . time() . "." . $fileExt;
+                    $destination = $uploadDir . $newFileName;
+
+                    $stmt = mysqli_prepare($conn, "SELECT * FROM user_imgs WHERE user_id = ?");
+                    mysqli_stmt_bind_param($stmt, "i", $id);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        $userImg = mysqli_fetch_assoc($result);
+
+                        if (file_exists($userImg['path'])) {
+                            unlink($userImg['path']);
+                        }
+
+                        if (move_uploaded_file($fileTempLocation, $destination)) {
+
+                            $stmt = mysqli_prepare($conn, "UPDATE user_imgs SET path = ? WHERE user_id = ?");
+                            mysqli_stmt_bind_param($stmt, "si", $destination, $id);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+                        }
+                    } else {
+                        if (move_uploaded_file($fileTempLocation, $destination)) {
+                            $stmt = mysqli_prepare($conn, "INSERT INTO user_imgs (path,user_id) VALUES (?,?) ");
+                            mysqli_stmt_bind_param($stmt, "si", $destination, $id);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+                        }
+                    }
+                    $changes = true;
+                }
+            }
+            if ($changes) {
+                $_SESSION['succeseful'] = true;
+                $_SESSION['msg']        = "Profile updated successfully";
+            }
+            header("Location: account.php");
+            exit;
         }
-        if ($changes) {
-            $_SESSION['succeseful'] = true;
-            $_SESSION['msg']        = "Profile updated successfully";
-        }
-        header("Location: account.php");
+    }else{
+        header("Location: login.php");
         exit;
     }
 ?>
@@ -144,155 +152,35 @@
     <link rel="stylesheet" href="styles/account.css">
 </head>
 <body>
-    <div class="backdrop">
-        <div class="hambi-navigation">
-            <div class="hn-first">
-                <a href="index.php">
-                    <img src="imgs\icons\logo_black.svg" width="45" alt="">
-                </a>
-                <div class="leave-nav">
-                    <img src="imgs\icons\x.svg" width="45" alt="">
-                </div>
-            </div>
-            <div class="hn-second">
-                <ul>
-                    <li><a class="nav-link" href="">Store <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Mac <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPad <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPhone <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Watch <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Vision <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">AirPods <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">TV & Home <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Entertainment <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Accesories <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Support <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" style="margin-top:2rem" href="bag.php">Bag <img src="imgs\icons\bag.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Search <img src="imgs\icons\search.svg" width="25" alt=""></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <nav>
-        <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" width="27" alt="">
-        </a>
-        <ul>
-            <li><a class="nav-link" href="">Store</a></li>
-            <li><a class="nav-link" href="">Mac</a></li>
-            <li><a class="nav-link" href="">iPad</a></li>
-            <li><a class="nav-link" href="">iPhone</a></li>
-            <li><a class="nav-link" href="">Watch</a></li>
-            <li><a class="nav-link" href="">Vision</a></li>
-            <li><a class="nav-link" href="">AirPods</a></li>
-            <li><a class="nav-link" href="">TV & Home</a></li>
-            <li><a class="nav-link" href="">Entertainment</a></li>
-            <li><a class="nav-link" href="">Accesories</a></li>
-            <li><a class="nav-link" href="">Support</a></li>
-        </ul>
-
-        <div class="nav-right">
-            <a href="" class="search nav-icon">
-                <img src="imgs\icons\search.svg" width="25rem" alt="">
-            </a>
-            <a href="bag.php" class="bag nav-icon">
-                <img src="imgs\icons\bag.svg" width="25rem" alt="">
-            </a>
-            <?php if (isset($_SESSION['id'])): ?>
-                <div class="user-menu">
-                    <img src="imgs\icons\user.svg" width ="25" alt="">
-
-                    <div class="user-dropdown">
-                        <div class="user-about">
-                            <div class="user-img">
-                                <img src=<?php echo $_SESSION['img'] ?> class="profile-pic-little" alt="">
-                            </div>
-                            <div class="user-name-n-r">
-                                <p class="name"><?php echo $_SESSION['username'] ?></p>
-
-                                <?php if ($_SESSION['perm'] == 1): ?>
-                                <p class="role r-s">Supporter</p>
-                                <?php elseif ($_SESSION['perm'] == 2): ?>
-                                <p class="role r-a">Administrator</p>
-                                <?php elseif ($_SESSION['perm'] == 3): ?>
-                                <p class="role r-sa">Super Administrator</p>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <a class="um-item">
-                            <div class="left-um-item">
-                                <img src="imgs/icons/manage.svg" width="20" alt="">
-                                Manage Account
-                            </div>
-                            <img src="imgs\icons\goto.svg" width="25"  alt="">
-                        </a>
-                        <a class="um-item">
-                            <div class="left-um-item">
-                                <img src="imgs/icons/notifications.svg" width="20" alt="">
-                                Notifications
-                            </div>
-                            <img src="imgs\icons\goto.svg" width="25"  alt="">
-                        </a>
-                        <a class="um-item">
-                            <div class="left-um-item">
-                                <img src="imgs/icons/help.svg" width="20" alt="">
-                                Help and Support
-                            </div>
-                            <img src="imgs\icons\goto.svg" width="25"  alt="">
-                        </a>
-                        <?php if ($_SESSION['perm'] > 0): ?>
-                        <a class="um-item">
-                            <div class="left-um-item">
-                                <img src="imgs/icons/dashboard.svg" width="20" alt="">
-                                Dashboard
-                            </div>
-                            <img src="imgs\icons\goto.svg" width="25"  alt="">
-                        </a>
-                        <?php endif; ?>
-                        <hr>
-                        <a href="logout.php" class="um-item">
-                            <div class="left-um-item">
-                                <img src="imgs/icons/logout.svg" width="20" alt="">
-                                Log out
-                            </div>
-                            <img src="imgs\icons\goto.svg" width="25"  alt="">
-                        </a>
-                    </div>
-                </div>
-            <?php endif; ?>
-        <div class="hambi">
-            <img src="imgs/icons/hambi.svg" width="25rem" alt="">
-        </div>
-        </div>
-    </nav>
+    <?php require_once "nav.php" ?>
 
     <article>
         <div class="left-side">
-            <img class="profile-pic" src=<?php echo $_SESSION['img'] ?> alt="">
+            <img class="profile-pic" src=<?php echo htmlspecialchars($_SESSION['img']) ?> alt="">
             <div class="stats">
                 <div class="li">
-                    <img src="imgs\icons\purchase.svg" width="20rem" alt="">
+                    <img src="imgs/iconspurchase.svg" width="20rem" alt="">
                     <div class="res">
                         Purchased Products:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\wish.svg" width="20rem" alt="">
+                    <img src="imgs/iconswish.svg" width="20rem" alt="">
                     <div class="res">
                         Wishlist:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\review.svg" width="20rem" alt="">
+                    <img src="imgs/iconsreview.svg" width="20rem" alt="">
                     <div class="res">
                         Reviews:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\question.svg" width="20rem" alt="">
+                    <img src="imgs/iconsquestion.svg" width="20rem" alt="">
                     <div class="res">
                         Asked Questions:
                         <span class="res-n">30</span>
@@ -302,33 +190,33 @@
         </div>
         <div class="right-side">
             <div class="text-box">
-                <h1><?php echo $_SESSION['username'] ?></h1>
-                <p><?php echo $email ?></p>
+                <h1><?php echo htmlspecialchars($_SESSION['username']) ?></h1>
+                <p><?php echo htmlspecialchars($email) ?></p>
                 <button class="edit">Edit Profile</button>
                 <div class="stats2">
                 <div class="li">
-                    <img src="imgs\icons\purchase.svg" width="20rem" alt="">
+                    <img src="imgs/iconspurchase.svg" width="20rem" alt="">
                     <div class="res">
                         Purchased Products:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\wish.svg" width="20rem" alt="">
+                    <img src="imgs/iconswish.svg" width="20rem" alt="">
                     <div class="res">
                         Wishlist:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\review.svg" width="20rem" alt="">
+                    <img src="imgs/iconsreview.svg" width="20rem" alt="">
                     <div class="res">
                         Reviews:
                         <span class="res-n">30</span>
                     </div>
                 </div>
                 <div class="li">
-                    <img src="imgs\icons\question.svg" width="20rem" alt="">
+                    <img src="imgs/iconsquestion.svg" width="20rem" alt="">
                     <div class="res">
                         Asked Questions:
                         <span class="res-n">30</span>
@@ -350,10 +238,10 @@
             <form method="POST" action="account.php" enctype="multipart/form-data">
                 <div class="top">
                     <h2>Profile settings</h2>
-                    <img src="imgs\icons/x.svg" width="40" alt="">
+                    <img src="imgs/icons/x.svg" width="40" alt="">
                 </div>
                 <input type="text" placeholder="New Username" name="newUsername" value="<?php if (isset($_SESSION['username'])) {
-                                                                                                echo($_SESSION['username']);
+                                                                                                echo(htmlspecialchars($_SESSION['username']));
                                                                                         }
                                                                                         ?>">
                 <div class="change-img">
@@ -395,7 +283,6 @@
             </form>
         </div>
     </div>
-    <script src="scripts/navigation.js"></script>
 
     <script>
         const leaveModal = document.querySelector('.top img')

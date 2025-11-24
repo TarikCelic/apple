@@ -2,23 +2,29 @@
     session_start();
     require_once "config.php";
 
-    if (isset($_POST['answer-btn'])) {
-        $answer      = $_POST['answer'];
-        $id_question = $_POST['question_id'];
+    if(isset($_SESSION['id']) && $_SESSION['perm'] > 0){
+        if (isset($_POST['answer-btn'])) {
+            $answer      = $_POST['answer'];
+            $id_question = $_POST['question_id'];
 
-        $errors = [];
-        $id     = $_SESSION['id'];
+            $errors = [];
+            $id     = $_SESSION['id'];
 
-        if (empty($answer) || strlen($answer) < 2) {
-            $erros['general'] = "Answer is too short";
-        } else {
-            $stmt = mysqli_prepare($conn, "UPDATE contact_messages SET answer = ? , answered = ? WHERE id = ?");
-            mysqli_stmt_bind_param($stmt, "sii", $answer, $id, $id_question);
-            mysqli_stmt_execute($stmt);
+            if (empty($answer) || strlen($answer) < 2) {
+                $errors['general'] = "Answer is too short";
+            } else {
+                $stmt = mysqli_prepare($conn, "UPDATE contact_messages SET answer = ? , answered = ? WHERE id = ?");
+                mysqli_stmt_bind_param($stmt, "sii", $answer, $id, $id_question);
+                mysqli_stmt_execute($stmt);
 
-            header("Location: dashboard.php");
-            exit;
+                header("Location: dashboard.php");
+                exit;
+            }
         }
+    }
+    else{
+        header("Location: login.php");
+        exit;
     }
 ?>
 <!DOCTYPE html>

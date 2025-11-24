@@ -17,65 +17,7 @@
     <link rel="stylesheet" href="styles/bag.css">
 </head>
 <body>
-    <div class="backdrop">
-        <div class="hambi-navigation">
-            <div class="hn-first">
-                <a href="index.php">
-                    <img src="imgs\icons\logo_black.svg" width="40" alt="">
-                </a>
-                <div class="leave-nav">
-                    <img src="imgs\icons\x.svg" width="40" alt="">
-                </div>
-            </div>
-            <div class="hn-second">
-                <ul>
-                    <li><a class="nav-link" href="">Store <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Mac <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPad <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPhone <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Watch <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Vision <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">AirPods <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">TV & Home <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Entertainment <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Accesories <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Support <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" style="margin-top:2rem" href="bag.php">Bag <img src="imgs\icons\bag.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Search <img src="imgs\icons\search.svg" width="25" alt=""></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <nav>
-        <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" width="27" class="logo" alt="">
-        </a>
-        <ul>
-            <li><a class="nav-link" href="">Store</a></li>
-            <li><a class="nav-link" href="">Mac</a></li>
-            <li><a class="nav-link" href="">iPad</a></li>
-            <li><a class="nav-link" href="">iPhone</a></li>
-            <li><a class="nav-link" href="">Watch</a></li>
-            <li><a class="nav-link" href="">Vision</a></li>
-            <li><a class="nav-link" href="">AirPods</a></li>
-            <li><a class="nav-link" href="">TV & Home</a></li>
-            <li><a class="nav-link" href="">Entertainment</a></li>
-            <li><a class="nav-link" href="">Accesories</a></li>
-            <li><a class="nav-link" href="">Support</a></li>
-        </ul>
-
-        <div class="nav-right">
-            <a href="" class="search nav-icon">
-                <img src="imgs\icons\search.svg" width="25rem" alt="">
-            </a>
-            <a href="bag.php" class="bag nav-icon">
-                <img src="imgs\icons\bag.svg" width="25rem" alt="">
-            </a>
-        </div>
-        <div class="hambi">
-            <img src="imgs/icons/hambi.svg" width="25rem" alt="">
-        </div>
-    </nav>
+    <?php require_once "nav.php" ?>
 
     <header>
         <div class="bag-section">
@@ -88,7 +30,7 @@
             <p>Estimated Tax <span class="tax">-</span></p>
 
             <button class="promo-btn">Do you have a Promo Code?
-                <img src="imgs\icons\arrow-btn.svg" width="20" alt="">
+                <img src="imgs/iconsarrow-btn.svg" width="20" alt="">
             </button>
             <form class="promo-form hidden" action="checkout.php" method="POST">
                 <div class="relative">
@@ -120,6 +62,5 @@
         })
     </script>
 
-    <script src="scripts/navigation.js"></script>
 </body>
 </html>

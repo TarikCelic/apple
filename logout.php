@@ -1,12 +1,17 @@
 <?php
 session_start();
-require_once "config.php";
 
-unset($_SESSION['id']);
-unset($_SESSION['username']);
+if(isset($_SESSION['id'])){
+    require_once "config.php";
 
-$_SESSION['succeseful'] = true;
-$_SESSION['msg']        = "You're logged out";
+    unset($_SESSION['perm']);
+    unset($_SESSION['id']);
+    unset($_SESSION['username']);
 
-header("Location: index.php");
-exit;
+    $_SESSION['succeseful'] = true;
+    $_SESSION['msg']        = "You're logged out";
+
+    header("Location: index.php");
+
+    exit;
+}

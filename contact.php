@@ -58,66 +58,7 @@
 </head>
 <body>
 
-    <div class="backdrop">
-        <div class="hambi-navigation">
-            <div class="hn-first">
-                <a href="index.php">
-                    <img src="imgs\icons\logo_black.svg" width="45" alt="">
-                </a>
-                <div class="leave-nav">
-                    <img src="imgs\icons\x.svg" width="45" alt="">
-                </div>
-            </div>
-            <div class="hn-second">
-                <ul>
-                    <li><a class="nav-link" href="">Store <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Mac <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPad <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">iPhone <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Watch <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Vision <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">AirPods <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">TV & Home <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Entertainment <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Accesories <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Support <img src="imgs\icons\goto.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" style="margin-top:2rem" href="bag.php">Bag <img src="imgs\icons\bag.svg" width="25" alt=""></a></li>
-                    <li><a class="nav-link" href="">Search <img src="imgs\icons\search.svg" width="25" alt=""></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <nav>
-        <a class="logo" href="index.php">
-            <img src="imgs\icons\logo_black.svg" width="27" alt="">
-        </a>
-        <ul>
-            <li><a class="nav-link" href="">Store</a></li>
-            <li><a class="nav-link" href="">Mac</a></li>
-            <li><a class="nav-link" href="">iPad</a></li>
-            <li><a class="nav-link" href="">iPhone</a></li>
-            <li><a class="nav-link" href="">Watch</a></li>
-            <li><a class="nav-link" href="">Vision</a></li>
-            <li><a class="nav-link" href="">AirPods</a></li>
-            <li><a class="nav-link" href="">TV & Home</a></li>
-            <li><a class="nav-link" href="">Entertainment</a></li>
-            <li><a class="nav-link" href="">Accesories</a></li>
-            <li><a class="nav-link" href="">Support</a></li>
-        </ul>
-
-        <div class="nav-right">
-            <a href="" class="search nav-icon">
-                <img src="imgs\icons\search.svg" width="25rem" alt="">
-            </a>
-            <a href="bag.php" class="bag nav-icon">
-                <img src="imgs\icons\bag.svg" width="25rem" alt="">
-            </a>
-        </div>
-        <div class="hambi">
-            <img src="imgs/icons/hambi.svg" width="25rem" alt="">
-        </div>
-    </nav>
-
+    <?php require_once "nav.php" ?>
     <?php if (! isset($_SESSION['id'])): ?>
 
         <div class="error-msg">
@@ -138,7 +79,7 @@
         <form action="contact.php" method="POST">
 
             <input value="<?php if (isset($username)) {
-                                  echo $username;
+                                  echo htmlspecialchars($username);
                           }
                           ?>" class="input" type="text" name="name" placeholder="Your full name" >
             <?php
@@ -147,7 +88,7 @@
                 }
             ?>
             <input value="<?php if (isset($email)) {
-        echo $email;
+        echo htmlspecialchars($email);
 }
 ?>" class="input" type="email" name="email" placeholder="Your email" >
                     <?php
@@ -156,7 +97,7 @@
                         }
                     ?>
             <input value="<?php if (isset($subject)) {
-        echo $subject;
+        echo htmlspecialchars($subject);
 }
 ?>" class="input" type="text" name="subject" placeholder="Subject" >
             <?php
@@ -164,10 +105,10 @@
                     echo '<p class="error">' . $errors['subject'] . '</p>';
                 }
             ?>
-            <textarea value="<?php if (isset($message)) {
-        echo $message;
+            <textarea class="input" name="message" placeholder="Your message..." ><?php if (isset($message)) {
+        echo htmlspecialchars($message);
 }
-?>" class="input" name="message" placeholder="Your message..." ></textarea>
+?></textarea>
             <?php
                 if (isset($errors['message'])) {
                     echo '<p class="error">' . $errors['message'] . '</p>';
@@ -179,7 +120,5 @@
 
     <?php endif; ?>
 
-
-    <script src="scripts/navigation.js"></script>
     </body>
 </html>
